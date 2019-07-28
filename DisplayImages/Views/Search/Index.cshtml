@@ -1,0 +1,57 @@
+﻿@model PagedList.IPagedList<DisplayImages.Models.UserModel>
+
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Search Results</h2>
+
+<div class="container addTopSpace">
+    <div class="col-md-12">
+        <h2>Album & User Information</h2>
+        <table class=" table table=bordered table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>First Thumbnail of Album</th>
+                    <th>Album Title</th>
+                    <th>User's Name</th>
+                    <th>User's Email</th>
+                    <th>User's Phone</th>
+                    <th>User's Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    foreach (var album in user.albums)
+                    {
+                        <tr>
+                            <td><img src="@user.photo.thumbnailUrl" /></td>
+                            <td>@Html.ActionLink(album.title, "Index", "AlbumTitles", new { id = album.id, fromSearch = true, page = ViewBag.page, searchBy = ViewBag.searchBy, search = ViewBag.Search }, null)</td>
+                            <td>@Html.ActionLink(user.name, "Index", "UserDetail", new { id = user.id, fromSearch = true, page = ViewBag.page, searchBy = ViewBag.searchBy, search = ViewBag.Search }, null)</td>
+                            <td>@Html.DisplayFor(model => user.email)</td>
+                            <td>@Html.DisplayFor(model => user.phone)</td>
+                            <td>
+                                @Html.DisplayFor(model => user.address.street)
+                                @Html.DisplayFor(model => user.address.suite),
+                                @Html.DisplayFor(model => user.address.city),
+                                @Html.DisplayFor(model => user.address.zipcode)
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchBy = ViewBag.searchBy, search = ViewBag.search }))
+
+
+
+

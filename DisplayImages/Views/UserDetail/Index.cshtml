@@ -1,0 +1,99 @@
+﻿@model DisplayImages.Models.UserDetailModel
+
+@{
+    ViewBag.Title = "UserDetail";
+}
+
+<h2>@Html.DisplayFor(model => Model.User.name)</h2>
+
+<div class="container">
+    <div class="col-md-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Username</td>
+                    <td>Email</td>
+                    <td>Phone</td>
+                    <td>Website</td>
+                    <td>Adress</td>
+                    <td>Geo: lat</td>
+                    <td>Geo: lgn</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Html.DisplayFor(model => Model.User.username)</td>
+                    <td>@Html.DisplayFor(model => Model.User.email)</td>
+                    <td>@Html.DisplayFor(model => Model.User.phone)</td>
+                    <td>@Html.DisplayFor(model => Model.User.website)</td>
+                    <td>
+                        @Html.DisplayFor(model => Model.User.address.street)
+                        @Html.DisplayFor(model => Model.User.address.suite),
+                        @Html.DisplayFor(model => Model.User.address.city),
+                        @Html.DisplayFor(model => Model.User.address.zipcode)
+                    </td>
+                    <td>@Html.DisplayFor(model => Model.User.address.geo.lat)</td>
+                    <td>@Html.DisplayFor(model => Model.User.address.geo.lng)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container addTopSpace">
+    <div class="col-md-12">
+        <h3>Company</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Name</td>
+                    <td>Catch Phrase</td>
+                    <td>BS</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Html.DisplayFor(model => Model.User.company.name)</td>
+                    <td>@Html.DisplayFor(model => Model.User.company.catchPhrase)</td>
+                    <td>@Html.DisplayFor(model => Model.User.company.bs)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="container addTopSpace">
+    <div class="col-md-12">
+        <h3>Posts</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Title</td>
+                    <td>Body</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var post in Model.Posts)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(model => post.title)</td>
+                        <td>@Html.DisplayFor(model => post.body)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (ViewBag.fromSearch)
+{
+    <div>
+        <div class="col-md-11"></div>
+        <div class="col-md-1">
+            <input class="btn btn-default" type="button" value="Back" onclick="location.href='@Url.Action("Index","Search", new { page = ViewBag.page, searchBy = ViewBag.searchBy, search = ViewBag.Search })'" />
+        </div>
+
+    </div>
+}
+
+

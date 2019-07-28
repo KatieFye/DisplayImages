@@ -1,0 +1,67 @@
+﻿@model PagedList.IPagedList<DisplayImages.Models.UserModel>
+
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@*Search*@
+@using (Html.BeginForm("Index", "Search", FormMethod.Get))
+    {
+        <div class="container col-md-12">
+            <table class="table"style="border:none; border-collapse:collapse; ">
+                <tr>
+                    <td><b>Search By:</b></td>
+                    <td> @Html.RadioButton("SearchBy", "Album Title", true)Album Title</td>
+                     <td>@Html.RadioButton("SearchBy", "User's Name")User's Name</td>
+                    <td>@Html.TextBox("Search")</td>
+                    <td>
+                        <input class="btn btn-default" type="submit" value="Search" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    }
+
+<div class="container addTopSpace">
+    <div class="col-md-12">
+        <h2>Album & User Information</h2>
+        <table class=" table table=bordered table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>First Thumbnail of Album</th>
+                    <th>Album Title</th>
+                    <th>User's Name</th>
+                    <th>User's Email</th>
+                    <th>User's Phone</th>
+                    <th>User's Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var user in Model)
+                {
+                    foreach(var album in user.albums)
+                    {
+                <tr>
+                    <td><img src="@user.photo.thumbnailUrl" /></td>
+                    <td>@Html.ActionLink(album.title, "Index", "AlbumTitles", new { id = album.id }, null)</td>
+                    <td>@Html.ActionLink(user.name, "Index", "UserDetail", new { id = user.id }, null)</td>
+                    <td>@Html.DisplayFor(model => user.email)</td>
+                    <td>@Html.DisplayFor(model => user.phone)</td>
+                    <td>
+                        @Html.DisplayFor(model => user.address.street)
+                        @Html.DisplayFor(model => user.address.suite),
+                        @Html.DisplayFor(model => user.address.city),
+                        @Html.DisplayFor(model => user.address.zipcode)
+                    </td>
+                </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
